@@ -1,0 +1,44 @@
+var locations = [
+  {title: 'Thompson', location: {lat: 47.263699, lng: -122.482973}},
+  {title: 'Harned', location: {lat: 47.263641, lng: -122.483616}},
+  {title: 'Wyatt', location: {lat:47.261792, lng: -122.482619}},
+  {title: 'Wheelock Student Center', location: {lat: 47.263190, lng: -122.479196}},
+  {title: 'Jones Hall', location: {lat: 47.263626, lng: -122.481138}},
+  {title: 'Wayerhouser', location: {lat: 47.260466, lng: -122.480591}},
+  {title: 'Collins Memorial Library', location: {lat: 47.264362, lng: -122.481771}}
+];
+
+var styles = [
+  {
+      "stylers": [
+          {
+              "hue": "#dd0d0d"
+          }
+      ]
+  },
+  {
+      "featureType": "road",
+      "elementType": "labels",
+      "stylers": [
+          {
+              "visibility": "off"
+          }
+      ]
+  },
+  {
+      "featureType": "road",
+      "elementType": "geometry",
+      "stylers": [
+          {
+              "lightness": 100
+          },
+          {
+              "visibility": "simplified"
+          }
+      ]
+  }
+];
+
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBaS4P1TQIyGJbHPPeE5wQjeQ6_ytuwpNM&libraries=geometry&v=3&callback=initMap">
+</script>

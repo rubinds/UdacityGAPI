@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+    html,
+    body {
+      font-family: Arial, sans-serif;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    #map {
+      height: 100%;
+    }
+    </style>
+  </head>
+  <body>
+    <div id="map" style="
+      width: 50%;
+    "></div>
+    <script>
+      var map;
+      function initMap(){
+        // Constructor crates a new map- only center and zoom are required.
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 47.262947, lng: -122.481197}, //(47.262947, -122.481197)
+          zoom: 17
+        });
+      var collins_library = {lat: 47.264362, lng: -122.481782};
+      var marker = new google.maps.Marker({
+        position: collins_library,
+        map: map,
+        title: 'Collins Memorial Library'
+      });
+      var infoWindow = new google.maps.InfoWindow({
+        content: 'Get your books and research done at CML!'
+      });
+      marker.addListener('click', function(){
+        infoWindow.open(map,marker);
+      });
+    }
+    </script>
+
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBaS4P1TQIyGJbHPPeE5wQjeQ6_ytuwpNM&v=3&callback=initMap">
+    </script>
+  </body>
+</html>

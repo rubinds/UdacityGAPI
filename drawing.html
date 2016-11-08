@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+    html,
+    body {
+      font-family: Arial, sans-serif;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    #map {
+      bottom:0px;
+      height: 100%;
+      left:362px;
+      position: absolute;
+      right: 0px;
+    }
+
+    .options-box {
+      background: $fff;
+      border: 1px solid #999;
+      border-radius: 3px;
+      height: 100%;
+      line-height: 20px;
+      padding: 10px 10px 30px 10px;
+      text-align: left;
+      width: 340px;
+    }
+    </style>
+  </head>
+    <body>
+      <div class="container">
+        <div class="options-box">
+          <h3>Take a look at campus locations</h3>
+          <div>
+            <input id="show-buildings" type="button" value="Show Buildings">
+            <input id="hide-buildings" type="button" value="Hide Buildings">
+          </div>
+        </div>
+      <div id="map"></div>
+    </div>
+    <script>
+        var map;
+        // blank array for markers
+        var markers =[];
+        function initMap(){
+          // Constructor crates a new map- only center and zoom are required.
+          map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: 47.262947, lng: -122.481197}, //(47.262947, -122.481197)
+            zoom: 17
+          });
+
+          // these are the buildings around campus. Typically would be stored in a
+          // database, will attempt push on next iteration
+          var locations = [
+            {title: 'Thompson', location: {lat: 47.263699, lng: -122.482973}},
+            {title: 'Harned', location: {lat: 47.263641, lng: -122.483616}},
+            {title: 'Wyatt', location: {lat:47.261792, lng: -122.482619}},
+            {title: 'Wheelock Student Center', location: {lat: 47.263190, lng: -122.479196}},
+            {title: 'Jones Hall', location: {lat: 47.263626, lng: -122.481138}},
+            {title: 'Wayerhouser', location: {lat: 47.260466, lng: -122.480591}},
+            {title: 'Collins Memorial Library', location: {lat: 47.264362, lng: -122.481771}}
+          ];
+
+          var largeInfoWindow = new google.maps.InfoWindow();
+
+          // initialize the drawing manager.
+          var drawingManager = new google.maps.drawingManager({
+            drawingMode: google.maps.drawing.OverlayType.POLYGON,
+            drawingControl: true,
+            drawingControlOptions: {
+              position: google.maps.ControlPosition.TOP_LEFT,
+              drawingModes: [
+                google.maps.drawing.OverlayType.POLYGON
+              ]
+            }
+          });
+
+          var bounds = new google.maps.LatLngBounds();
+
+          // marker initializer
+          for (var i = 0; i<locations.length; i++){
+            // get the position for each item
+            var position = locations[i].location;
+            var title = locations[i].title;
+            // create marker per locations
+            var marker = new google.maps.Marker({
+              //map: map,
+              position: position,
+              title: title,
+              animation: google.maps.Animation.DROP,
+              id: i
+            });
+            // push to marker array
+            markers.push(marker);
+            console.log('Call a' +markers.length);
+            // extends the boundaries of the map for each marker
+            // very useful for our project
+            bounds.extend(marker.position);
+            //event listener for marker click
+            marker.addListener('click', function(){
+              populateInfoWindow(this, largeInfoWindow);
+            });
+          }
+            //map.fitBounds(bounds);
+
+          document.getElementById('show-buildings').addEventListener('click', showBuildings);
+          document.getElementById('hide-buildings').addEventListener('click', hideBuildings);
+        }
+        console.log('Call b' +markers.length);
+        // populates InfoWindows
+        function populateInfoWindow(marker, infoWindow) {
+          //check to make sure the window is not already open
+          if (infoWindow.marker != marker) {
+            infoWindow.marker = marker;
+            infoWindow.setContent('<div>' + marker.title + '</div>');
+            infoWindow.open(map, marker);
+            // ,ake sure the marker is cleared if window is closed
+            infoWindow.addListener('closeclick', function(){
+              infoWindow.setMarker(null);
+            })
+          }
+        }
+
+        // loops through markers to display all
+        function showBuildings() {
+          var bounds = new google.maps.LatLngBounds();
+          // bound extender per listing
+          for (var i = 0; i < markers.length; i++){
+            markers[i].setMap(map);
+            bounds.extend(markers[i].position);
+          }
+          map.fitBounds(bounds);
+        }
+
+        // marker hiding function
+        function hideBuildings(){
+          for (var i = 0; i< markers.length; i++){
+            markers[i].setMap(null);
+          }
+        }
+        console.log('Call c' +markers.length);
+    </script>
+
+      <script async defer
+        src="https://maps.googleapis.com/maps/api/js?libraries=drawing,geometry&key=AIzaSyBaS4P1TQIyGJbHPPeE5wQjeQ6_ytuwpNM&v=3&callback=initMap">
+      </script>
+    </body>
+</html>
